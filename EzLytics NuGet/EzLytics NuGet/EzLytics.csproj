@@ -14,6 +14,7 @@
     <RepositoryUrl>https://github.com/CyanCoding/EzLytics</RepositoryUrl>
     <RepositoryType>Private</RepositoryType>
     <PackageTags>Analytics</PackageTags>
+    <Version>0.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
