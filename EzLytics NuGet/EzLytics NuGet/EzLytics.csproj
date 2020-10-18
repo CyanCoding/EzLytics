@@ -1,10 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>EzLytics_NuGet</RootNamespace>
+    <RootNamespace>EzLyticsSDK</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Authors>CyanCoding</Authors>
+    <Company>EzLytics</Company>
+    <Description>An analytics framework for tracking program flow and reporting errors</Description>
+    <Copyright>EzLytics</Copyright>
+    <PackageProjectUrl>https://github.com/CyanCoding/EzLytics</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/CyanCoding/EzLytics</RepositoryUrl>
+    <RepositoryType>Private</RepositoryType>
+    <PackageTags>Analytics</PackageTags>
+    <Version>0.0.5</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
 
 </Project>
