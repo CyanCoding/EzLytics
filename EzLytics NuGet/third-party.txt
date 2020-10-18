@@ -1,0 +1,10 @@
+This is a list of external libraries and items used in
+the EzLytics NuGet program.
+
+==== Images ====
+
+-- Logo --
+The EzLytics NuGet logo was made by
+Smashicons on flaticon.com
+
+<https://www.flaticon.com/authors/smashicons>
