@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/CyanCoding/EzLytics</RepositoryUrl>
     <RepositoryType>Private</RepositoryType>
     <PackageTags>Analytics</PackageTags>
-    <Version>0.0.5</Version>
+    <Version>0.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,10 +22,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 </Project>
