@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EzLytics_NuGet</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>

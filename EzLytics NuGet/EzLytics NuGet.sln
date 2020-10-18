@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzLytics NuGet", "EzLytics NuGet\EzLytics NuGet.csproj", "{5FA79B13-4842-494E-822C-C1B2C3CDCF4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzLytics", "EzLytics NuGet\EzLytics.csproj", "{5FA79B13-4842-494E-822C-C1B2C3CDCF4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
