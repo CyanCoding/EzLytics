@@ -2,7 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EzLytics_NuGet {
-    class EzLytics {
+namespace EzLyticsSDK {
+    public class EzLytics {
+        public string path { get; set; }
+
+        public void StartTracking() {
+            Tracking tracking = new Tracking();
+
+            path = tracking.Start();
+        }
+
     }
 }
