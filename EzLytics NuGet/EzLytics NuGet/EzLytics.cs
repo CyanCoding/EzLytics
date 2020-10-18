@@ -7,7 +7,12 @@ namespace EzLyticsSDK {
         /// <summary>
         /// The path to the EzLytics file.
         /// </summary>
-        public string path { get; set; }
+        public string Path { get; set; }
+
+        /// <summary>
+        /// A human friendly name for the program (optional).
+        /// </summary>
+        public string ProgramName { get; set; }
 
         /// <summary>
         /// Creates a new EzLytics file and begins analyzing.
@@ -15,10 +20,10 @@ namespace EzLyticsSDK {
         public void StartTracking() {
             Tracking tracking = new Tracking();
 
-            path = tracking.Start();
+            Path = tracking.GenerateRandomFile();
 
-            if (path != "") {
-                tracking.StartRecording(path);
+            if (Path != "") {
+                tracking.StartRecording(Path, ProgramName);
             }
         }
 
