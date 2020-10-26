@@ -13,7 +13,7 @@ namespace EzLyticsSDK {
         /// Creates a new EzLytics file.
         /// </summary>
         /// <returns>File path of the new EzLytics file.</returns>
-        public string GenerateRandomFile() {
+        internal string GenerateRandomFile() {
             try {
                 if (!Directory.Exists(TEMP_FOLDER)) {
                     Directory.CreateDirectory(TEMP_FOLDER);
@@ -37,7 +37,7 @@ namespace EzLyticsSDK {
         /// </summary>
         /// <param name="path">The path to the EzLytics file.</param>
         /// <param name="programName">A human friendly program name. (optional)</param>
-        public void StartRecording(string path, string programName) {
+        internal void StartRecording(string path, string programName) {
             string recordType = "AUTO";
             string flag = "program_start";
             string message = "The program has started.";
