@@ -65,6 +65,9 @@ namespace EzLyticsSDK {
             catch (IOException) {
                 throw new Exception("Unable to access" + path + " EzLytics file. (Error 201)");
             }
+            catch (Exception) {
+                throw new Exception("Unable to access" + path + " EzLytics file. (Error 202)");
+            }
         }
     }
 }
