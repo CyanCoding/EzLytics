@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -12,6 +13,9 @@ namespace EzLyticsSDK {
         /// <summary>
         /// Creates a new EzLytics file.
         /// </summary>
+        /// 
+        /// <exception cref="IOException">Failed to access the EzLytics temp folder.</exception>
+        /// 
         /// <returns>File path of the new EzLytics file.</returns>
         public string GenerateRandomFile() {
             try {
@@ -19,10 +23,22 @@ namespace EzLyticsSDK {
                     Directory.CreateDirectory(TEMP_FOLDER);
                 }
             }
-            catch (Exception) {
-                // Could not write to that folder
-                throw new Exception("Failed to access the EzLytics temp folder. (Error 200)");
+            catch (PathTooLongException e) {
+                // This should NEVER happen
+                throw new PathTooLongException("The temporary folder path is too long. (Error 206)", e);
             }
+            catch (DirectoryNotFoundException e) {
+                // Might occur if the AppData file is missing. Might want to fix that.
+                // TODO: Create a fix for this
+                throw new DirectoryNotFoundException("Part of the path is invalid. (Error 205)", e);
+            }
+            catch (IOException e) {
+                throw new IOException("Failed to create the EzLytics temp folder. (Error 203)", e);
+            }
+            catch (UnauthorizedAccessException e) {
+                throw new UnauthorizedAccessException("You are not authorized to create a folder at " + TEMP_FOLDER + ". (Error 204)", e);
+            }
+
 
             string randomFile = string.Format(@"{0}.ezl", Guid.NewGuid());
             string filePath = Path.Combine(TEMP_FOLDER, randomFile);
@@ -47,24 +63,44 @@ namespace EzLyticsSDK {
                 programName = AppDomain.CurrentDomain.FriendlyName;
             }
 
-            // Example output:
-            // ["AUTO", "program_start", "The program has started.", "10/18/2020 00:00:00", "Goal Getter"]
-            string formatted = string.Format(
-                "[\"{0}\", \"{1}\", \"{2}\", \"{3}\", \"{4}\"]",
-                recordType, flag, message, date, programName);
+            Formatting formatting = new Formatting();
+            string formatted = formatting.FormatNewLine(recordType, flag, message, date, programName);
+
+            IO fileIO = new IO();
 
             try {
-                FileStream fileStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write);
-
-                StreamWriter streamWriter = new StreamWriter(fileStream);
-
-                streamWriter.WriteLine(formatted);
-                streamWriter.Flush();
-                streamWriter.Close();
+                fileIO.WriteToGeneralFile(path, formatted);
             }
-            catch (IOException) {
-                throw new Exception("Unable to access" + path + " EzLytics file. (Error 201)");
+            catch (IOException e) {
+                throw new IOException("Unable to access " + path + " EzLytics file. (Error 201)", e);
             }
+            
+        }
+
+        internal void ButtonListener(string path, string buttonName, string message, string programName) {
+            string recordType = buttonName;
+            string flag = "button_press";
+            string date = DateTime.Now.ToString();
+            // By default the message is "A button was pressed."
+
+            if (programName == null || programName == "") {
+                programName = AppDomain.CurrentDomain.FriendlyName;
+            }
+
+            Formatting formatting = new Formatting();
+            string formatted = formatting.FormatNewLine(recordType, flag, message, date, programName);
+
+            IO fileIO = new IO();
+
+            try {
+                fileIO.WriteToGeneralFile(path, formatted);
+            }
+<<<<<<< Updated upstream
+=======
+            catch (IOException e) {
+                throw new IOException("Unable to access " + path + " EzLytics file. (Error 202)", e);
+            }
+>>>>>>> Stashed changes
         }
     }
 }

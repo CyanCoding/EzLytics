@@ -27,5 +27,17 @@ namespace EzLyticsSDK {
             }
         }
 
+        /// <summary>
+        /// Creates a new listener for a button type.
+        /// </summary>
+        /// <param name="buttonName">Optional. The name of the button being pressed.</param>
+        /// <param name="message">Optional. A specific message when the button is pressed.</param>
+        public void NewButtonListener(string buttonName = "BUTTON", string message = "A button was pressed.") {
+            // This code runs when a button is pressed
+
+            Tracking tracking = new Tracking();
+            tracking.ButtonListener(Path, buttonName, message, ProgramName);
+        }
+
     }
 }
