@@ -19,14 +19,14 @@ namespace EzLyticsSDK {
         /// <summary>
         /// A list of flags that the SDK already uses.
         /// </summary>
-        private string[] unuseableFlags = {
+        readonly private string[] unuseableFlags = {
             "program_start"
         };
 
         /// <summary>
         /// A list of listeners that the SDK already uses.
         /// </summary>
-        private string[] unuseableListeners = {
+        readonly private string[] unuseableListeners = {
             "Auto"
         };
 
@@ -59,11 +59,11 @@ namespace EzLyticsSDK {
         /// <exception cref="IOException">The function could not access the EzLytics data file.</exception>
         
         // TODO: Make sure the flag isn't program_start or anything bad. Also make sure the name isn't Auto.
-        public void NewBasicListener(string flag = "basic_listener", string listenerName = "New listener", string message = "A basic listener was activated.") {
+        public void NewBasicListener(string flag = "basic_listener", 
+            string listenerName = "New listener", 
+            string message = "A basic listener was activated.") {
             // Check for unuseable system data
-            CheckData(flag, unuseableFlags, flag + " is a system flag. Check the flag list in the EzLytics documentation for useable flags (error 208).");
-            CheckData(listenerName, unuseableListeners, listenerName + " is a system listener name and cannot be used." +
-                        "Check the listener list in the EzLytics documentation for useable listener names (error 209).");
+            CheckData(listenerName, flag);
 
             Tracking tracking = new Tracking();
             tracking.BasicListener(Path, flag, listenerName, message, ProgramName);
@@ -81,8 +81,7 @@ namespace EzLyticsSDK {
         /// <exception cref="EzLyticsException">The data set was invalid.</exception>
         public void NewButtonListener(string buttonName = "Button", string message = "A button was pressed.") {
             // Check for unuseable system data
-            CheckData(buttonName, unuseableListeners, buttonName + " is a system listener name and cannot be used." +
-                        "Check the listener list in the EzLytics documentation for useable listener names (error 209).");
+            CheckData(buttonName);
 
             Tracking tracking = new Tracking();
             tracking.BasicListener(Path, "button_press", buttonName, message, ProgramName);
@@ -99,8 +98,7 @@ namespace EzLyticsSDK {
         /// <exception cref="EzLyticsException">The data set was invalid.</exception>
         public void NewMouseListener(string mouseButton = "Mouse", string message = "The mouse was clicked.") {
             // Check for unuseable system data
-            CheckData(mouseButton, unuseableListeners, mouseButton + " is a system listener name and cannot be used." +
-                        "Check the listener list in the EzLytics documentation for useable listener names (error 209).");
+            CheckData(mouseButton);
 
             Tracking tracking = new Tracking();
             tracking.BasicListener(Path, "mouse_press", mouseButton, message, ProgramName);
@@ -116,6 +114,9 @@ namespace EzLyticsSDK {
         /// <exception cref="IOException">The function could not access the EzLytics data file.</exception>
         /// <exception cref="EzLyticsException">The data set was invalid.</exception>
         public void NewKeyboardListener(string keyPressed = "Key", string message = "A key was pressed.") {
+            // Check for unuseable system data
+            CheckData(keyPressed);
+
             Tracking tracking = new Tracking();
             tracking.BasicListener(Path, "key_press", keyPressed, message, ProgramName);
         }
@@ -124,6 +125,10 @@ namespace EzLyticsSDK {
         /// <summary>
         /// Checks data against an invalid data set.
         /// If the data is invalid, it throws an EzLyticsException with a variable message.
+        /// 
+        /// This is done so that the user doesn't accidentally 
+        /// use a system flag\listener, like 'program_start' and
+        /// cause the program to trip and think it just started again.
         /// </summary>
         /// 
         /// <param name="data">The data to check.</param>
@@ -131,10 +136,16 @@ namespace EzLyticsSDK {
         /// <param name="exceptionMessage">The exception message if the data is invalid.</param>
         /// 
         /// <exception cref="EzLyticsException">The data set was invalid.</exception>
-        private void CheckData(string data, string[] unuseableData, string exceptionMessage) {
-            foreach (string unuseableDataString in unuseableData) {
-                if (unuseableDataString == data) {
-                    throw new EzLyticsException(exceptionMessage);
+        private void CheckData(string listener = "", string flag = "") {
+            foreach (string i in unuseableListeners) {
+                if (listener == i) {
+                    throw new ArgumentException(listener + " is an invalid listener name! (Use something else)");
+                }
+            }
+
+            foreach (string i in unuseableFlags) {
+                if (flag == i) {
+                    throw new ArgumentException(flag + " is an invalid flag! (Use something else)");
                 }
             }
         }
