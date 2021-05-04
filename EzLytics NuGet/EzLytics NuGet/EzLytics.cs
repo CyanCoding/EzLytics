@@ -159,13 +159,13 @@ namespace EzLyticsSDK {
         private void CheckData(string listener = "", string flag = "") {
             foreach (string i in unuseableListeners) {
                 if (listener == i) {
-                    throw new ArgumentException(listener + " is an invalid listener name! (Use something else)");
+                    throw new ArgumentException(listener + " is an invalid listener name! (Error 301)");
                 }
             }
 
             foreach (string i in unuseableFlags) {
                 if (flag == i) {
-                    throw new ArgumentException(flag + " is an invalid flag! (Use something else)");
+                    throw new ArgumentException(flag + " is an invalid flag! (Error 302)");
                 }
             }
         }

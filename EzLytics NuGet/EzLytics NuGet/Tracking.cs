@@ -38,9 +38,6 @@ namespace EzLyticsSDK {
             catch (IOException e) {
                 throw new IOException("Failed to create the EzLytics temp folder. (Error 203)", e);
             }
-            catch (UnauthorizedAccessException e) {
-                throw new UnauthorizedAccessException("You are not authorized to create a folder at " + TEMP_FOLDER + ". (Error 204)", e);
-            }
 
 
             string randomFile = string.Format(@"{0}.ezl", Guid.NewGuid());
