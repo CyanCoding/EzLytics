@@ -20,7 +20,7 @@ namespace EzLyticsSDK {
         /// <exception cref="UnauthorizedAccessException">The function does not have authorization to create a folder there.</exception>
         /// 
         /// <returns>File path of the new EzLytics file.</returns>
-        public string GenerateRandomFile() {
+        internal string GenerateRandomFile() {
             try {
                 if (!Directory.Exists(TEMP_FOLDER)) {
                     Directory.CreateDirectory(TEMP_FOLDER);
@@ -54,7 +54,7 @@ namespace EzLyticsSDK {
         /// <summary>
         /// Records a basic activity.
         /// </summary>
-        /// 
+	    /// 
         /// <param name="path">The path of the EzLytics file to update.</param>
         /// <param name="flag">The data flag.</param>
         /// <param name="recordType">The type of data recording.</param>
@@ -81,6 +81,9 @@ namespace EzLyticsSDK {
             }
             catch (IOException e) {
                 throw new IOException("Unable to access " + path + " EzLytics file. (Error 202)", e);
+            }
+            catch (Exception) {
+                throw new Exception("Unable to access" + path + " EzLytics file. (Error 202)");
             }
         }
     }
