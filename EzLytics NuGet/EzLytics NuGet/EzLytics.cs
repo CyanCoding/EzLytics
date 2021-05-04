@@ -9,7 +9,7 @@ namespace EzLyticsSDK {
         /// <summary>
         /// The path to the EzLytics file.
         /// </summary>
-        private string Path { get; set; }
+        public string Path { get; private set; }
 
         /// <summary>
         /// A human friendly name for the program (optional).

@@ -62,26 +62,20 @@ namespace EzLyticsSDK {
         /// 
         /// <exception cref="IOException">The function could not access the EzLytics file.</exception>
         internal void BasicListener(string path, string flag, string recordType, string message, string programName) {
+            // Get the start date of the listener
             string date = DateTime.Now.ToString();
 
+            // Fill in the program name if it's not present
             if (programName == null || programName == "") {
                 programName = AppDomain.CurrentDomain.FriendlyName;
             }
 
+            // Format the arguments we were passed into one string
             Formatting formatting = new Formatting();
             string formatted = formatting.FormatNewLine(recordType, flag, message, date, programName);
 
-            IO fileIO = new IO();
-
-            try {
-                fileIO.WriteToGeneralFile(path, formatted);
-            }
-            catch (IOException e) {
-                throw new IOException("Unable to access " + path + " EzLytics file. (Error 202)", e);
-            }
-            catch (Exception) {
-                throw new Exception("Unable to access" + path + " EzLytics file. (Error 202)");
-            }
+            // Append to the data file
+            File.AppendAllText(path, formatted + "\n");
         }
     }
 }
