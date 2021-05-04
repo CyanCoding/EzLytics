@@ -14,7 +14,10 @@ namespace EzLyticsSDK {
         /// Creates a new EzLytics file.
         /// </summary>
         /// 
+        /// <exception cref="PathTooLongException">The temporary folder path is too long.</exception>
+        /// <exception cref="DirectoryNotFoundException">Part of the path was invalid.</exception>
         /// <exception cref="IOException">Failed to access the EzLytics temp folder.</exception>
+        /// <exception cref="UnauthorizedAccessException">The function does not have authorization to create a folder there.</exception>
         /// 
         /// <returns>File path of the new EzLytics file.</returns>
         public string GenerateRandomFile() {
@@ -49,14 +52,19 @@ namespace EzLyticsSDK {
         // TODO: We need to create a folder for all of the EzLytics files because how can we find it again if the program crashes? Also delete them when we send data?
 
         /// <summary>
-        /// Starts the program analysis.
+        /// Records a basic activity.
         /// </summary>
-        /// <param name="path">The path to the EzLytics file.</param>
-        /// <param name="programName">A human friendly program name. (optional)</param>
-        public void StartRecording(string path, string programName) {
-            string recordType = "AUTO";
-            string flag = "program_start";
-            string message = "The program has started.";
+        /// 
+        /// <param name="path">The path of the EzLytics file to update.</param>
+        /// <param name="flag">The data flag.</param>
+        /// <param name="recordType">The type of data recording.</param>
+        /// <param name="message">The human-friendly message to go alongside the data.</param>
+        /// <param name="programName">(Optional) The human-friendly program name.</param>
+        /// 
+        /// <example>BasicListener("C:\\Users\Public\\Downloads\\File.ezl", "button_press", "Button1", "Button 1 was pressed", "Example Program")</example>
+        /// 
+        /// <exception cref="IOException">The function could not access the EzLytics file.</exception>
+        internal void BasicListener(string path, string flag, string recordType, string message, string programName) {
             string date = DateTime.Now.ToString();
 
             if (programName == null || programName == "") {
@@ -71,36 +79,9 @@ namespace EzLyticsSDK {
             try {
                 fileIO.WriteToGeneralFile(path, formatted);
             }
-            catch (IOException e) {
-                throw new IOException("Unable to access " + path + " EzLytics file. (Error 201)", e);
-            }
-            
-        }
-
-        internal void ButtonListener(string path, string buttonName, string message, string programName) {
-            string recordType = buttonName;
-            string flag = "button_press";
-            string date = DateTime.Now.ToString();
-            // By default the message is "A button was pressed."
-
-            if (programName == null || programName == "") {
-                programName = AppDomain.CurrentDomain.FriendlyName;
-            }
-
-            Formatting formatting = new Formatting();
-            string formatted = formatting.FormatNewLine(recordType, flag, message, date, programName);
-
-            IO fileIO = new IO();
-
-            try {
-                fileIO.WriteToGeneralFile(path, formatted);
-            }
-<<<<<<< Updated upstream
-=======
             catch (IOException e) {
                 throw new IOException("Unable to access " + path + " EzLytics file. (Error 202)", e);
             }
->>>>>>> Stashed changes
         }
     }
 }
