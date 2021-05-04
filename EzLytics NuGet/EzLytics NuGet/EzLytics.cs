@@ -17,7 +17,7 @@ namespace EzLyticsSDK {
         public string ProgramName { get; set; }
 
         /// <summary>
-	/// A list of flags that the SDK already uses.
+	    /// A list of flags that the SDK already uses.
         /// </summary>
         readonly private string[] unuseableFlags = {
             "program_start"
@@ -29,12 +29,13 @@ namespace EzLyticsSDK {
         readonly private string[] unuseableListeners = {
             "Auto"
         };
-		
-	/// How often in seconds to send data to the server.
+
+	    private int privateDataSendInterval = 60;
+        /// <summary>
+        /// How often in seconds to send data to the server.
         /// By default it is set to 60 seconds.
         /// Must be in a range of 60 - 300 seconds.
         /// </summary>
-	private int privateDataSendInterval = 60;
         public int DataSendInterval {
             get { return privateDataSendInterval; }
             set {
