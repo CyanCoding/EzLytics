@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -12,6 +13,12 @@ namespace EzLyticsSDK {
         /// <summary>
         /// Creates a new EzLytics file.
         /// </summary>
+        /// 
+        /// <exception cref="PathTooLongException">The temporary folder path is too long.</exception>
+        /// <exception cref="DirectoryNotFoundException">Part of the path was invalid.</exception>
+        /// <exception cref="IOException">Failed to access the EzLytics temp folder.</exception>
+        /// <exception cref="UnauthorizedAccessException">The function does not have authorization to create a folder there.</exception>
+        /// 
         /// <returns>File path of the new EzLytics file.</returns>
         internal string GenerateRandomFile() {
             try {
@@ -19,10 +26,22 @@ namespace EzLyticsSDK {
                     Directory.CreateDirectory(TEMP_FOLDER);
                 }
             }
-            catch (Exception) {
-                // Could not write to that folder
-                throw new Exception("Failed to access the EzLytics temp folder. (Error 200)");
+            catch (PathTooLongException e) {
+                // This should NEVER happen
+                throw new PathTooLongException("The temporary folder path is too long. (Error 206)", e);
             }
+            catch (DirectoryNotFoundException e) {
+                // Might occur if the AppData file is missing. Might want to fix that.
+                // TODO: Create a fix for this
+                throw new DirectoryNotFoundException("Part of the path is invalid. (Error 205)", e);
+            }
+            catch (IOException e) {
+                throw new IOException("Failed to create the EzLytics temp folder. (Error 203)", e);
+            }
+            catch (UnauthorizedAccessException e) {
+                throw new UnauthorizedAccessException("You are not authorized to create a folder at " + TEMP_FOLDER + ". (Error 204)", e);
+            }
+
 
             string randomFile = string.Format(@"{0}.ezl", Guid.NewGuid());
             string filePath = Path.Combine(TEMP_FOLDER, randomFile);
@@ -33,37 +52,35 @@ namespace EzLyticsSDK {
         // TODO: We need to create a folder for all of the EzLytics files because how can we find it again if the program crashes? Also delete them when we send data?
 
         /// <summary>
-        /// Starts the program analysis.
+        /// Records a basic activity.
         /// </summary>
-        /// <param name="path">The path to the EzLytics file.</param>
-        /// <param name="programName">A human friendly program name. (optional)</param>
-        internal void StartRecording(string path, string programName) {
-            string recordType = "AUTO";
-            string flag = "program_start";
-            string message = "The program has started.";
+	    /// 
+        /// <param name="path">The path of the EzLytics file to update.</param>
+        /// <param name="flag">The data flag.</param>
+        /// <param name="recordType">The type of data recording.</param>
+        /// <param name="message">The human-friendly message to go alongside the data.</param>
+        /// <param name="programName">(Optional) The human-friendly program name.</param>
+        /// 
+        /// <example>BasicListener("C:\\Users\Public\\Downloads\\File.ezl", "button_press", "Button1", "Button 1 was pressed", "Example Program")</example>
+        /// 
+        /// <exception cref="IOException">The function could not access the EzLytics file.</exception>
+        internal void BasicListener(string path, string flag, string recordType, string message, string programName) {
             string date = DateTime.Now.ToString();
 
             if (programName == null || programName == "") {
                 programName = AppDomain.CurrentDomain.FriendlyName;
             }
 
-            // Example output:
-            // ["AUTO", "program_start", "The program has started.", "10/18/2020 00:00:00", "Goal Getter"]
-            string formatted = string.Format(
-                "[\"{0}\", \"{1}\", \"{2}\", \"{3}\", \"{4}\"]",
-                recordType, flag, message, date, programName);
+            Formatting formatting = new Formatting();
+            string formatted = formatting.FormatNewLine(recordType, flag, message, date, programName);
+
+            IO fileIO = new IO();
 
             try {
-                FileStream fileStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write);
-
-                StreamWriter streamWriter = new StreamWriter(fileStream);
-
-                streamWriter.WriteLine(formatted);
-                streamWriter.Flush();
-                streamWriter.Close();
+                fileIO.WriteToGeneralFile(path, formatted);
             }
-            catch (IOException) {
-                throw new Exception("Unable to access" + path + " EzLytics file. (Error 201)");
+            catch (IOException e) {
+                throw new IOException("Unable to access " + path + " EzLytics file. (Error 202)", e);
             }
             catch (Exception) {
                 throw new Exception("Unable to access" + path + " EzLytics file. (Error 202)");
