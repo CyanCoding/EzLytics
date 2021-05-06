@@ -20,7 +20,8 @@ namespace EzLyticsSDK {
 	    /// A list of flags that the SDK already uses.
         /// </summary>
         readonly private string[] unuseableFlags = {
-            "program_start"
+            "program_start",
+            "program_end"
         };
 
         /// <summary>
@@ -66,6 +67,15 @@ namespace EzLyticsSDK {
             if (Path != "") {
                 tracking.BasicListener(Path, "program_start", "Auto", "The program has started.", ProgramName);
             }
+        }
+
+        /// <summary>
+        /// Ends the EzLytics file.
+        /// </summary>
+        public void EndTracking() {
+            Tracking tracking = new Tracking();
+
+            tracking.BasicListener(Path, "program_end", "Auto", "The program has stopped.", ProgramName);
         }
 
         /// <summary>
